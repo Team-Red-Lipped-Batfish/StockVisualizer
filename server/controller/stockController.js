@@ -1,7 +1,7 @@
-import { response } from "express";
+import { response } from 'express';
 
 // Import some models Eventually
-// const db = require('../models/index.js');
+const db = require('../model/index.js');
 
 // Helper Functions
 
