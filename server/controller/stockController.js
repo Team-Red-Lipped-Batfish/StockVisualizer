@@ -8,7 +8,7 @@ import { response } from "express";
 const convertDateToSeconds = (inputString) => {
   const date = new Date(inputString);
   return date.getTime() / 1000;
-}
+};
 
 const buildDateRange = (inputData, startDate, endDate) => {
   if (!Array.isArray(inputData)) return 'Please provide an array as the inputData';
