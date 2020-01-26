@@ -11,29 +11,33 @@ const convertDateToSeconds = (inputString) => {
 };
 
 const buildDateRange = (inputData, startDate, endDate) => {
-  if (!Array.isArray(inputData)) return 'Please provide an array as the inputData';
+  if (typeof inputData !== 'object') return 'Please provide an Object as the inputData';
   if (typeof startDate !== 'string' || typeof endDate !== 'string') return 'Please provide strings for Dates';
 
+  const data = Object.entries(inputData['Time Series (Daily)']);
   const startDateSeconds = convertDateToSeconds(startDate);
   const endDateSeconds = convertDateToSeconds(endDate);
 
   const workingArray = [];
 
-  inputData.forEach((data) => {
-    const currentDate = convertDateToSeconds(data[0]);
+  for (let i = 0; i < data.length; i += 1) {
+    const currentDate = convertDateToSeconds(data[i][0]);
+
+    if (currentDate < startDateSeconds) i = data.length - 1;
 
     if (currentDate >= startDateSeconds && currentDate <= endDateSeconds) {
       const buildObject = {};
-      buildObject.date = data[0];
-      buildObject.open = data[1]['1. open'];
-      buildObject.high = data[1]['2. high'];
-      buildObject.low = data[1]['3. low'];
-      buildObject.close = data[1]['4. close'];
-      buildObject.volume = data[1]['5. volume'];
+
+      buildObject.date = data[i][0];
+      buildObject.open = data[i][1]['1. open'];
+      buildObject.high = data[i][1]['2. high'];
+      buildObject.low = data[i][1]['3. low'];
+      buildObject.close = data[i][1]['4. close'];
+      buildObject.volume = data[i][1]['5. volume'];
 
       workingArray.push(buildObject);
     }
-  });
+  }
 
   return workingArray;
 };
