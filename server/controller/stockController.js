@@ -2,7 +2,7 @@ import { response } from 'express';
 
 // Import some models Eventually
 const db = require('../model/index.js');
-
+const fetch = require('node-fetch');
 // Helper Functions
 
 const convertDateToSeconds = (inputString) => {
