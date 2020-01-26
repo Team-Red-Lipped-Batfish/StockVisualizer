@@ -6,7 +6,11 @@
   "scripts": {
     "start": "nodemon server/server.js",
     "dev": "webpack-dev-server --open",
+<<<<<<< HEAD
     "build": "production webpack",
+=======
+    "build": "webpack",
+>>>>>>> dev
     "quick": "npm run start & npm run dev"
   },
   "keywords": [],
