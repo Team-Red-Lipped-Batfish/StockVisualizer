@@ -1,24 +1,28 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-useless-constructor */
+/* eslint-disable react/jsx-filename-extension */
+/* eslint-disable react/prefer-stateless-function */
 import React, { Component } from 'react';
 
 
-export default class Visualizer extends React.Component {
+export default class Visualizer extends Component {
+  constructor(props) {
+    super(props);
+  }
+
   render() {
-    // let tricker = this.props.tricker.map((tricker) => {
-
-
-    // ???????????????????????????????????????????????????
     //  console.log('props:', this.props)
+    const { app } = this.props;
     const {
       handleSubmit,
       handleChange,
       start,
       end,
       searchValue,
-    } = this.props.app;
+    } = app;
     return (
       <div className="SearchBar">
         <form
-          onSubmit={handleSubmit}
           className="grid-container"
         >
           <input
@@ -43,7 +47,7 @@ export default class Visualizer extends React.Component {
             onChange={handleChange}
           />
           <br />
-          <button onClick={handleSubmit}>Search</button>
+          <button type="submit" onClick={handleSubmit}>Search</button>
         </form>
       </div>
     );
