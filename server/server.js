@@ -24,7 +24,7 @@ app.use(bodyParser.json());
 
 // Cookie Properties: encrypts cookie and makes it a day long
 app.use(cookieSession({
-  maxAge: 24 * 60 * 60 * 1000,
+  maxAge: 24,
   keys: [keys.session.cookieKey],
 }));
 
@@ -56,5 +56,15 @@ app.use('/api/stock/', stock, (req, res) => {
   res.send('This is the stock routes');
 });
 
+app.use((err, req, res, next) => {
+  const defaultErr = {
+    log: 'Express error handler caught unknown middleware error',
+    status: 400,
+    message: { err: 'An error occurred' },
+  };
+  const errorObj = Object.assign({}, defaultErr, err);
+  console.log(errorObj.log);
+  return res.status(errorObj.status).json(errorObj.message);
+});
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+app.listen(port, () => console.log(`Example app listening on port ${port}!`));

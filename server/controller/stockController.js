@@ -71,45 +71,69 @@ const stockController = {
       });
   },
 
-  // getPortfolio(req, res, next) {
-  //   const sqlQuery = `SELECT people.*, species.name AS species, planets.name AS homeworld
-  //   FROM people JOIN species ON species._id = people.species_id
-  //   JOIN planets ON planets._id = people.homeworld_id`;
+  getPortfolio(req, res, next) {
+    const sqlQuery = `
+    SELECT tickers
+    FROM StockTable
+    WHERE google_id = '${req.user.rows[0].google_id}'`;
 
-  //   db.query(sqlQuery)
-  //     .then((data) => {
-  //       res.locals = data;
-  //       return next();
-  //     })
-  //     .catch((error) => {
-  //       return next({
-  //         log: `stockController.getPortfolio: ERROR: ${error}`,
-  //         message: { err: 'Error occurred in stockController.getPortfolio. Check server logs for more details.' },
-  //       });
-  //     });
-  // },
+    db.query(sqlQuery)
+      .then((data) => {
+        const dataObject = {};
+        dataObject.google_id = req.user.rows[0].google_id;
+        dataObject.data = data;
 
-  // addStockToPortfolio(req, res, next) {
-  // // write code here
-  // const {name, gender, species_id, birth_year, eye_color, skin_color, hair_color, mass, height, homeworld_id} = req.body;
-  // const sqlQueryObj = {
-  //   text: `INSERT INTO people (name, gender, species_id, birth_year, eye_color, skin_color, hair_color, mass, height, homeworld_id)
-  //   VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
-  //   values: [name, gender, species_id, birth_year, eye_color, skin_color, hair_color, mass, height, homeworld_id],
-  // };
-  // db.query(sqlQueryObj)
-  //   .then((response) => next())
-  //   .catch((error) => {
-  //     return next({
-  //         log: `stockController.addStockToPortfolio: ERROR: ${error}`,
-  //         message: { err: 'Error occurred in stockController.addStockToPortfolio. Check server logs for more details.' },
-  //       });
-  //   });
-  // },
+        res.locals = dataObject;
+        return next();
+      })
+      .catch((error) => {
+        console.log(error);
+        return next({
+          log: `stockController.getPortfolio: ERROR: ${error}`,
+          message: { err: 'Error occurred in stockController.getPortfolio. Check server logs for more details.' },
+        });
+      });
+  },
 
-  // deleteStockfromPortfolio(req, res, next) {
+  addStockToPortfolio(req, res, next) {
+    console.log('request query addStockToPortfolio', req.query);
 
-  // },
+    const { ticker, google_id } = req.query;
+    const sqlQueryObj = {
+      text: `INSERT INTO StockTable (tickers, google_id)
+      VALUES ($1, $2)`,
+      values: [ticker, google_id],
+    };
+
+    db.query(sqlQueryObj)
+      .then((response) => next())
+      .catch((error) => {
+        return next({
+            log: `stockController.addStockToPortfolio: ERROR: ${error}`,
+            message: { err: 'Error occurred in stockController.addStockToPortfolio. Check server logs for more details.' },
+          });
+      });
+  },
+
+  deleteStockFromPortfolio(req, res, next) {
+    console.log('request query deleteStockFromPortfolio', req.query);
+
+    const { tickers, google_id } = req.query;
+    const sqlQueryObj = {
+      text: `INSERT INTO StockTable (tickers, google_id)
+      VALUES ($1, $2)`,
+      values: [tickers, google_id],
+    };
+
+    db.query(sqlQueryObj)
+      .then((response) => next())
+      .catch((error) => {
+        return next({
+            log: `stockController.deleteStockFromPortfolio: ERROR: ${error}`,
+            message: { err: 'Error occurred in stockController.deleteStockFromPortfolio. Check server logs for more details.' },
+          });
+      });
+  },
 };
 
 module.exports = stockController;

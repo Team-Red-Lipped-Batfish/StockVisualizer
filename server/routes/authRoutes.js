@@ -3,11 +3,12 @@ const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 
+const stockController = require('../controller/stockController');
 
 // Handle the google redirect
-router.get('/google/callback', passport.authenticate('google'), (req, res, next) => {
+router.get('/google/callback', passport.authenticate('google'), stockController.getPortfolio, (req, res) => {
   // handle with passport
-  next();
+  res.status(200).json(res.locals);
 });
 
 //login with google
