@@ -372,9 +372,10 @@ export default class App extends Component {
     }
     return (
       <div>
-        <div>
-          <Visualizer
-            app={
+        <div className="stock-view">
+          <div>
+            <Visualizer
+              app={
            {
              searchValue,
              start,
@@ -383,17 +384,16 @@ export default class App extends Component {
              handleSubmit,
            }
           }
-          />
-        </div>
-        <Portfolio
-          portfolioList={portfolioList}
-          handleSubmit={handleSubmit}
-          handleChange={handleChange}
-          newStock={newStock}
-          addStockToPortfolio={addStockToPortfolio}
-          deleteStock={deleteStock}
-        />
-        <div className="stock-view">
+            />
+            <Portfolio
+              portfolioList={portfolioList}
+              handleSubmit={handleSubmit}
+              handleChange={handleChange}
+              newStock={newStock}
+              addStockToPortfolio={addStockToPortfolio}
+              deleteStock={deleteStock}
+            />
+          </div>
           <LineGraph
             data={data}
           />

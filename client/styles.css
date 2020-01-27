@@ -9,7 +9,7 @@ body {
   background-color: rgb(40, 44, 52);
   color: rgb(221, 221, 222);
   display: grid;
-  justify-content: center;
+  /* justify-content: center; */
   grid-template-columns: 1fr;
   grid-auto-flow: row;
 }
@@ -20,7 +20,7 @@ body {
 .stock-view {
   display: grid;
   grid-template-columns: max-content max-content;
-  grid-gap: 10%;
+  grid-gap: 2%;
 }
 
 input {

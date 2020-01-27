@@ -20,16 +20,15 @@ export default class Portfolio extends Component {
         <button ticker={ticker} type="submit" onClick={handleSubmit}>
           {ticker}
         </button>
-        <button ticker={ticker} type="submit" onClick={deleteStock}> Delete Stock</button>
+        <button ticker={ticker} type="submit" onClick={deleteStock}> Delete</button>
       </div>
     ));
     return (
       <div>
         <div className="addStock">
           <input field="newStock" type="text" placeholder="Add stock" value={newStock} onChange={handleChange} />
-          <button type="submit" onClick={addStockToPortfolio}>Add stock</button>
-
         </div>
+        <button type="submit" onClick={addStockToPortfolio}>Add stock</button>
         <div className="grid-container">
           <h3>Portfolio</h3>
           {jsxList}

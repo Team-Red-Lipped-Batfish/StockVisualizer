@@ -87,7 +87,7 @@ export default class LineGraph extends Component {
         className="Line Graph"
         style={{
           position: 'relative',
-          width: '80vw',
+          width: '70vw',
           height: '40vh',
         }}
       >
