@@ -30,7 +30,7 @@ const buildDateRange = (inputData, startDate, endDate) => {
   for (let i = data.length - 1; i >= 0; i -= 1) {
     const currentDate = convertDateToSeconds(data[i][0]);
 
-    if (currentDate > endDateSeconds) i = 1;
+    // if (currentDate > endDateSeconds) i = 1;
 
     if (currentDate >= startDateSeconds && currentDate <= endDateSeconds) {
       dates.push(data[i][0]);
