@@ -6,11 +6,7 @@
   "scripts": {
     "start": "nodemon server/server.js",
     "dev": "webpack-dev-server --open",
-<<<<<<< HEAD
-    "build": "production webpack",
-=======
     "build": "webpack",
->>>>>>> dev
     "quick": "npm run start & npm run dev"
   },
   "keywords": [],
@@ -30,10 +26,12 @@
   },
   "dependencies": {
     "body-parser": "^1.19.0",
+    "chart.js": "^2.9.3",
     "express": "^4.17.1",
     "node": "^13.6.0",
     "pg": "^7.17.1",
     "react": "^16.12.0",
+    "react-chartjs-2": "^2.9.0",
     "react-dom": "^16.12.0"
   }
 }
