@@ -55,11 +55,11 @@ const buildDateRange = (inputData, startDate, endDate) => {
 const stockController = {
 
   fetchStockData(req, res, next) {
-    console.log('request params', req.params);
-    fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${req.body.stockName}&outputsize=full&apikey=Y6A15R1X3FBQ97V4`)
+    console.log('request query', req.query);
+    fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${req.query.ticker}&outputsize=full&apikey=Y6A15R1X3FBQ97V4`)
       .then((responseData) => responseData.json())
       .then((responseData) => {
-        res.locals = buildDateRange(responseData, req.body.startDate, req.body.endDate);
+        res.locals = buildDateRange(responseData, req.query.start, req.query.end);
         return next();
       })
       .catch((error) => {
