@@ -22,6 +22,7 @@ export default class Visualizer extends Component {
     } = app;
     return (
       <div className="SearchBar">
+        <h3>Portfolio</h3>
         <form
           className="grid-container"
         >

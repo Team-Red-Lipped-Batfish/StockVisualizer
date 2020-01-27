@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+/* eslint-disable class-methods-use-this */
 /* eslint-disable react/jsx-filename-extension */
 import React, { Component } from 'react';
 import Login from './Login';
@@ -5,15 +7,19 @@ import Visualizer from './Visualizer';
 import LineGraph from './LineGraph';
 // eslint-disable-next-line no-unused-vars
 import styles from '../styles.css';
+import Portfolio from './Portfolio';
 
 export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       isLoggedin: true,
+      googleId: 'TEST',
       searchValue: '',
       start: '',
       end: '',
+      portfolioList: ['MSFT', 'SPOT', 'AAPL'],
+      newStock: '',
       data: {
         labels: [],
         datasets: [],
@@ -22,6 +28,8 @@ export default class App extends Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.addStockToPortfolio = this.addStockToPortfolio.bind(this);
+    this.deleteStock = this.deleteStock.bind(this);
   }
 
   componentDidMount() {
@@ -252,6 +260,25 @@ export default class App extends Component {
         ],
       },
     });
+
+    const { googleId } = this.state;
+    const url = `api/stock/getPortfolio/?google_id=${googleId}`;
+    const method = 'GET';
+
+    fetch(url, { method })
+      .then((response) => response.json())
+      .then((response) => {
+        console.log(response);
+        if (response) {
+          this.setState({
+            portfolioList: response[0].data,
+          });
+        }
+      })
+      // eslint-disable-next-line no-unused-vars
+      .catch((err) => {
+        console.log('could not fetch data');
+      });
   }
 
   handleChange(e) {
@@ -271,9 +298,12 @@ export default class App extends Component {
     // console.log('hello');
     const { searchValue, start, end } = this.state;
     e.preventDefault();
+    let ticker = e.target.getAttribute('ticker');
+    if (!ticker) ticker = searchValue;
 
+    console.log('ticker:', ticker);
 
-    const url = `route/?ticker=${searchValue}&start=${start}&end=${end}`;
+    const url = `api/stock/getStocks/?ticker=${ticker}&start=${start}&end=${end}`;
     // console.log(url);
 
     // eslint-disable-next-line no-undef
@@ -283,16 +313,60 @@ export default class App extends Component {
         console.log(data);
         this.setState({
           data: {
-            lables: data.date,
+            labels: data[0].dates,
             datasets: [
               {
-                label: `${searchValue} Closing Price`,
-                data: data.close,
+                label: `${ticker} Closing Price`,
+                data: data[0].close,
               },
             ],
           },
         });
       })
+      // eslint-disable-next-line no-unused-vars
+      .catch((err) => {
+        console.log('could not fetch data');
+      });
+  }
+
+  addStockToPortfolio() {
+    const { newStock, googleId } = this.state;
+    console.log(newStock, 'Add new stock to portfolio');
+
+    const url = `/api/stock/addStocks/?ticker=${newStock}&google_id=${googleId}`;
+    const method = 'POST';
+
+    fetch(url, { method })
+      .then((response) => response.json())
+      .then((response) => {
+        console.log(response);
+        this.setState({
+          portfolioList: response[0].data,
+        });
+      })
+      // eslint-disable-next-line no-unused-vars
+      .catch((err) => {
+        console.log('could not fetch data');
+      });
+  }
+
+  deleteStock(e) {
+    const { googleId } = this.state;
+    const ticker = e.target.getAttribute('ticker');
+    console.log(ticker, 'To be deleted');
+
+    const url = `/api/stock/deleteStocks/?ticker=${ticker}&google_id=${googleId}`;
+    const method = 'DELETE';
+
+    fetch(url, { method })
+      .then((response) => response.json())
+      .then((response) => {
+        console.log(response);
+        this.setState({
+          portfolioList: response[0].data,
+        });
+      })
+    // eslint-disable-next-line no-unused-vars
       .catch((err) => {
         console.log('could not fetch data');
       });
@@ -300,9 +374,11 @@ export default class App extends Component {
 
   render() {
     const {
-      isLoggedin, start, end, data, searchValue,
+      isLoggedin, start, end, data, searchValue, portfolioList, newStock,
     } = this.state;
-    const { handleChange, handleSubmit } = this;
+    const {
+      handleChange, handleSubmit, addStockToPortfolio, deleteStock,
+    } = this;
 
     // console.log(isLoggedin);
 
@@ -315,8 +391,10 @@ export default class App extends Component {
     }
     return (
       <div>
-        <Visualizer
-          app={
+        <div className="stock-view">
+          <div>
+            <Visualizer
+              app={
            {
              searchValue,
              start,
@@ -325,10 +403,20 @@ export default class App extends Component {
              handleSubmit,
            }
           }
-        />
-        <LineGraph
-          data={data}
-        />
+            />
+            <Portfolio
+              portfolioList={portfolioList}
+              handleSubmit={handleSubmit}
+              handleChange={handleChange}
+              newStock={newStock}
+              addStockToPortfolio={addStockToPortfolio}
+              deleteStock={deleteStock}
+            />
+          </div>
+          <LineGraph
+            data={data}
+          />
+        </div>
       </div>
     );
   }
