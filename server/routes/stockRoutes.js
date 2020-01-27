@@ -10,6 +10,6 @@ router.get('/getPortfolio/', stockController.getPortfolio, (req, res) => res.sta
 
 router.post('/addStocks/', stockController.addStockToPortfolio, stockController.getPortfolio, (req, res) => res.status(200).json([res.locals]));
 
-// router.delete('/deleteStocks', stockController.deleteStockfromPortfolio, stockController.getPortfolio, (req, res) => res.status(200).json([res.locals]));
+router.delete('/deleteStocks', stockController.deleteStockFromPortfolio, stockController.getPortfolio, (req, res) => res.status(200).json([res.locals]));
 
 module.exports = router;

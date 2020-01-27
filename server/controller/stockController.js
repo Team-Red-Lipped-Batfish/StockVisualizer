@@ -71,7 +71,9 @@ const stockController = {
       });
   },
 
-  getPortfolio(req, res, next) {
+  getLoginPortfolio(req, res, next) {
+    console.log('req.user', req.user);
+
     const sqlQuery = `
     SELECT tickers
     FROM StockTable
@@ -81,6 +83,34 @@ const stockController = {
       .then((data) => {
         const dataObject = {};
         dataObject.google_id = req.user.rows[0].google_id;
+        dataObject.data = data;
+
+        res.locals = dataObject;
+        return next();
+      })
+      .catch((error) => {
+        console.log(error);
+        return next({
+          log: `stockController.getPortfolio: ERROR: ${error}`,
+          message: { err: 'Error occurred in stockController.getPortfolio. Check server logs for more details.' },
+        });
+      });
+  },
+
+  getPortfolio(req, res, next) {
+    console.log('req.user', req.user);
+
+    const { google_id } = req.query;
+
+    const sqlQuery = `
+    SELECT tickers
+    FROM StockTable
+    WHERE google_id = '${google_id}'`;
+
+    db.query(sqlQuery)
+      .then((data) => {
+        const dataObject = {};
+        dataObject.google_id = google_id;
         dataObject.data = data;
 
         res.locals = dataObject;
@@ -109,29 +139,25 @@ const stockController = {
       .then((response) => next())
       .catch((error) => {
         return next({
-            log: `stockController.addStockToPortfolio: ERROR: ${error}`,
-            message: { err: 'Error occurred in stockController.addStockToPortfolio. Check server logs for more details.' },
-          });
+          log: `stockController.addStockToPortfolio: ERROR: ${error}`,
+          message: { err: 'Error occurred in stockController.addStockToPortfolio. Check server logs for more details.' },
+        });
       });
   },
 
   deleteStockFromPortfolio(req, res, next) {
     console.log('request query deleteStockFromPortfolio', req.query);
 
-    const { tickers, google_id } = req.query;
-    const sqlQueryObj = {
-      text: `INSERT INTO StockTable (tickers, google_id)
-      VALUES ($1, $2)`,
-      values: [tickers, google_id],
-    };
+    const { ticker, google_id } = req.query;
+    const sqlQueryStr = `DELETE FROM StockTable WHERE tickers = '${ticker}' AND google_id = '${google_id}';`;
 
-    db.query(sqlQueryObj)
+    db.query(sqlQueryStr)
       .then((response) => next())
       .catch((error) => {
         return next({
-            log: `stockController.deleteStockFromPortfolio: ERROR: ${error}`,
-            message: { err: 'Error occurred in stockController.deleteStockFromPortfolio. Check server logs for more details.' },
-          });
+          log: `stockController.deleteStockFromPortfolio: ERROR: ${error}`,
+          message: { err: 'Error occurred in stockController.deleteStockFromPortfolio. Check server logs for more details.' },
+        });
       });
   },
 };

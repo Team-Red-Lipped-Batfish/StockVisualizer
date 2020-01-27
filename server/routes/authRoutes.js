@@ -6,7 +6,7 @@ const passport = require('passport');
 const stockController = require('../controller/stockController');
 
 // Handle the google redirect
-router.get('/google/callback', passport.authenticate('google'), stockController.getPortfolio, (req, res) => {
+router.get('/google/callback', passport.authenticate('google'), stockController.getLoginPortfolio, (req, res) => {
   // handle with passport
   res.status(200).json(res.locals);
 });
