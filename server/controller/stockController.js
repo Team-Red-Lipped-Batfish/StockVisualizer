@@ -72,18 +72,22 @@ const stockController = {
   },
 
   getPortfolio(req, res, next) {
-    console.log('request query getPortfolio', req.query);
     const sqlQuery = `
     SELECT tickers
     FROM StockTable
-    WHERE google_id = 'TEST'`; // ${req.user.rows[0].google_id}
+    WHERE google_id = '${req.user.rows[0].google_id}'`;
 
     db.query(sqlQuery)
       .then((data) => {
-        res.locals = data;
+        const dataObject = {};
+        dataObject.google_id = req.user.rows[0].google_id;
+        dataObject.data = data;
+
+        res.locals = dataObject;
         return next();
       })
       .catch((error) => {
+        console.log(error);
         return next({
           log: `stockController.getPortfolio: ERROR: ${error}`,
           message: { err: 'Error occurred in stockController.getPortfolio. Check server logs for more details.' },
