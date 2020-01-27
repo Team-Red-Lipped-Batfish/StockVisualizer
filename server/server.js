@@ -6,15 +6,31 @@ const port = 3000;
 
 const bodyParser = require('body-parser');
 
+// Passport JS setup
+const cookieSession = require('cookie-session');
+const passport = require('passport');
+
+const passportSetup = require('./config/passport-setup');
+
 
 // Routes:
 const auth = require('./routes/authRoutes.js');
 const stock = require('./routes/stockRoutes.js');
+const keys = require('./config/keys.js');
 
 // Body Parser-
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+// Cookie Properties: encrypts cookie and makes it a day long
+app.use(cookieSession({
+  maxAge: 24 * 60 * 60 * 1000,
+  keys: [keys.session.cookieKey],
+}));
+
+// initalize passport
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Flow Test;
 app.use((req, res, next) => {
