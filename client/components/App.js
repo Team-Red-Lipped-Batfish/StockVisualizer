@@ -1,80 +1,90 @@
+/* eslint-disable react/jsx-filename-extension */
 import React from 'react';
-import Login from './Login'
+import Login from './Login';
 import Visualizer from './Visualizer';
+import LineGraph from './LineGraph';
+// eslint-disable-next-line no-unused-vars
+import styles from '../styles.css';
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-        isLoggedin: true,
-        searchValue: '',
-        start: '',
-        end: '',
-        tickers: []
-
+      isLoggedin: true,
+      searchValue: '',
+      start: '',
+      end: '',
+      tickers: [],
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-
-
   }
-  
+
   handleChange(e) {
     // console.log("HandleDateTrigger")
-    console.log(e.target.getAttribute('field'))  
+    // console.log(e.target.getAttribute('field'));
     const newState = {};
-    const field =  e.target.getAttribute('field');
-    newState[field] = e.target.value; 
+    const field = e.target.getAttribute('field');
+    newState[field] = e.target.value;
 
-    this.setState (
-      newState
-    )
-    console.log(this.state[field]);
-
+    this.setState(
+      newState,
+    );
+    // console.log(this.state[field]);
   }
+
   handleSubmit(e) {
-    console.log("hello")
+    // console.log('hello');
+    const { searchValue, start, end } = this.state;
     e.preventDefault();
- 
 
-    const url = `route/?ticker=${this.state.searchValue}&start=${this.state.start}&end=${this.state.end}`
-    console.log(url);
+
+    const url = `route/?ticker=${searchValue}&start=${start}&end=${end}`;
+    // console.log(url);
+
+    // eslint-disable-next-line no-undef
     fetch(url)
-      .then(response => 
-        response.json())
+      .then((response) => response.json())
       .then((data) => {
-      this.setState({
-        tickers:data
-       
+        this.setState({
+          tickers: data,
+        });
+      });
+  }
 
-      })
-})
-  
-  } 
-    render() {
-      // console.log('props from app:', this)
-      if(!this.state.isLoggedin) {
+  render() {
+    const {
+      isLoggedin, start, end, tickers, searchValue,
+    } = this.state;
+    const { handleChange, handleSubmit } = this;
+
+    // console.log(isLoggedin);
+
+    if (!isLoggedin) {
       return (
         <div>
-          <Login/>
+          <Login />
         </div>
-         )
-      }
-      return (
-
-        <div>
+      );
+    }
+    return (
+      <div>
         <Visualizer
-          app = {
-           {searchValue: this.state.searchValue,
-            satrt:this.state.start,
-            end:this.state.end,
-            handleChange: this.handleChange,
-            handleSubmit: this.handleSubmit,
-            tickers:this.state.tickers
+          app={
+           {
+             searchValue,
+             start,
+             end,
+             tickers,
+             handleChange,
+             handleSubmit,
            }
           }
         />
+        <LineGraph
+          data={tickers}
+        />
       </div>
-      )
-    }
+    );
   }
+}
