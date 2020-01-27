@@ -1,10 +1,8 @@
 const { Pool } = require('pg');
-
-const PG_URI = 'postgres://vfloeiab:Twuz4C95LdsGlQ0D_pdmV5Jea_gaDNb2@rajje.db.elephantsql.com:5432/vfloeiab';
-
+const keys = require('.././config/keys');
 // create a new pool here using the connection string above
 const pool = new Pool({
-  connectionString: PG_URI
+  connectionString: keys.db.PG_URI,
 });
 
 // Adding some notes about the database here will be helpful for future you or other developers.
