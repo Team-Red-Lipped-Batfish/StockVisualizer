@@ -53,6 +53,35 @@ export default class LineGraph extends Component {
   }
 
   render() {
+    let data = 0;
+    // eslint-disable-next-line react/destructuring-assignment
+    const temp = this.props.data.datasets[0];
+    if (temp) data = temp.data;
+    // console.log('data: ', data);
+    // console.log(typeof data);
+    // console.log(Array.isArray(data));
+    // console.log(data.length);
+
+    const values = Object.values(data);
+    // console.log(values);
+    // const max = -Infinity;
+    // keys.forEach((key) => {
+    //   console.log(data[key]);
+    // });
+
+    const numSteps = 5;
+    // const maxData = data.reduce((acc, cur) => {
+    //   if (acc > cur) return acc;
+    //   return cur;
+    // });
+
+    const step = Math.round(((Math.max(...values) - Math.min(...values)) / (numSteps - 1)));
+    console.log(Math.max(...values));
+    console.log(Math.min(...values));
+    console.log(step);
+    // console.log('step: ', step);
+
+    // console.log(Math.max(...data) - Math.min(...data));
     return (
       <div
         className="Line Graph"
@@ -71,6 +100,13 @@ export default class LineGraph extends Component {
                 // This more specific font property overrides the global property
                 fontColor: 'rgb(221, 221, 222)',
               },
+            },
+            scales: {
+              yAxes: [{
+                ticks: {
+                  stepSize: step,
+                },
+              }],
             },
           }}
           data={this.getChartData}

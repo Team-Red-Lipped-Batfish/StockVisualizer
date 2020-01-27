@@ -14,6 +14,7 @@ export default class App extends Component {
     super(props);
     this.state = {
       isLoggedin: true,
+      googleId: 'test',
       searchValue: '',
       start: '',
       end: '',
@@ -310,13 +311,46 @@ export default class App extends Component {
   }
 
   addStockToPortfolio() {
-    const { newStock } = this.state;
+    const { newStock, googleId } = this.state;
     console.log(newStock, 'Add new stock to portfolio');
+
+    const url = `/api/stock/addStocks/?ticker=${newStock}&google_id=${googleId}`;
+    const method = 'POST';
+
+    // fetch(url, { method })
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     console.log(data);
+    //     this.setState({
+    //       portfolioList: data,
+    //     });
+    //   })
+    //   // eslint-disable-next-line no-unused-vars
+    //   .catch((err) => {
+    //     console.log('could not fetch data');
+    //   });
   }
 
   deleteStock(e) {
+    const { googleId } = this.state;
     const ticker = e.target.getAttribute('ticker');
     console.log(ticker, 'To be deleted');
+
+    const url = `/api/stock/deleteStocks/?ticker=${ticker}&google_id=${googleId}`;
+    const method = 'DELETE';
+
+    // fetch(url, { method })
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     console.log(data);
+    //     this.setState({
+    //       portfolioList: data,
+    //     });
+    //   })
+    // // eslint-disable-next-line no-unused-vars
+    //   .catch((err) => {
+    //     console.log('could not fetch data');
+    //   });
   }
 
   render() {
