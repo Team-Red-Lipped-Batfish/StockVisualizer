@@ -1,4 +1,4 @@
-/// add this file to .gitignore
+// add this file to .gitignore
 
 
 module.exports = {
@@ -12,4 +12,4 @@ module.exports = {
   session: {
     cookieKey: 'Stockvisualizer',
   },
-}
+};

@@ -1,4 +1,4 @@
-//import { response } from 'express';
+// import { response } from 'express';
 
 const fetch = require('node-fetch');
 const db = require('../model/index.js');
@@ -83,7 +83,7 @@ const stockController = {
       .then((data) => {
         const dataObject = {};
         dataObject.google_id = req.user.rows[0].google_id;
-        dataObject.data = data;
+        dataObject.data = data.rows.map((el) => el.tickers);
 
         res.locals = dataObject;
         return next();
@@ -111,7 +111,7 @@ const stockController = {
       .then((data) => {
         const dataObject = {};
         dataObject.google_id = google_id;
-        dataObject.data = data;
+        dataObject.data = data.rows.map((el) => el.tickers);
 
         res.locals = dataObject;
         return next();
@@ -137,12 +137,10 @@ const stockController = {
 
     db.query(sqlQueryObj)
       .then((response) => next())
-      .catch((error) => {
-        return next({
-          log: `stockController.addStockToPortfolio: ERROR: ${error}`,
-          message: { err: 'Error occurred in stockController.addStockToPortfolio. Check server logs for more details.' },
-        });
-      });
+      .catch((error) => next({
+        log: `stockController.addStockToPortfolio: ERROR: ${error}`,
+        message: { err: 'Error occurred in stockController.addStockToPortfolio. Check server logs for more details.' },
+      }));
   },
 
   deleteStockFromPortfolio(req, res, next) {
@@ -153,12 +151,10 @@ const stockController = {
 
     db.query(sqlQueryStr)
       .then((response) => next())
-      .catch((error) => {
-        return next({
-          log: `stockController.deleteStockFromPortfolio: ERROR: ${error}`,
-          message: { err: 'Error occurred in stockController.deleteStockFromPortfolio. Check server logs for more details.' },
-        });
-      });
+      .catch((error) => next({
+        log: `stockController.deleteStockFromPortfolio: ERROR: ${error}`,
+        message: { err: 'Error occurred in stockController.deleteStockFromPortfolio. Check server logs for more details.' },
+      }));
   },
 };
 

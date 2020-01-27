@@ -76,9 +76,9 @@ export default class LineGraph extends Component {
     // });
 
     const step = Math.round(((Math.max(...values) - Math.min(...values)) / (numSteps - 1)));
-    console.log(Math.max(...values));
-    console.log(Math.min(...values));
-    console.log(step);
+    // console.log(Math.max(...values));
+    // console.log(Math.min(...values));
+    // console.log(step);
     // console.log('step: ', step);
 
     // console.log(Math.max(...data) - Math.min(...data));

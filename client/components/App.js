@@ -260,6 +260,25 @@ export default class App extends Component {
         ],
       },
     });
+
+    const { googleId } = this.state;
+    const url = `api/stock/getPortfolio/?google_id=${googleId}`;
+    const method = 'GET';
+
+    fetch(url, { method })
+      .then((response) => response.json())
+      .then((response) => {
+        console.log(response);
+        if (response) {
+          this.setState({
+            portfolioList: response[0].data,
+          });
+        }
+      })
+      // eslint-disable-next-line no-unused-vars
+      .catch((err) => {
+        console.log('could not fetch data');
+      });
   }
 
   handleChange(e) {
@@ -317,18 +336,18 @@ export default class App extends Component {
     const url = `/api/stock/addStocks/?ticker=${newStock}&google_id=${googleId}`;
     const method = 'POST';
 
-    // fetch(url, { method })
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     console.log(data);
-    //     this.setState({
-    //       portfolioList: data,
-    //     });
-    //   })
-    //   // eslint-disable-next-line no-unused-vars
-    //   .catch((err) => {
-    //     console.log('could not fetch data');
-    //   });
+    fetch(url, { method })
+      .then((response) => response.json())
+      .then((response) => {
+        console.log(response);
+        this.setState({
+          portfolioList: response[0].data,
+        });
+      })
+      // eslint-disable-next-line no-unused-vars
+      .catch((err) => {
+        console.log('could not fetch data');
+      });
   }
 
   deleteStock(e) {
@@ -339,18 +358,18 @@ export default class App extends Component {
     const url = `/api/stock/deleteStocks/?ticker=${ticker}&google_id=${googleId}`;
     const method = 'DELETE';
 
-    // fetch(url, { method })
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     console.log(data);
-    //     this.setState({
-    //       portfolioList: data,
-    //     });
-    //   })
-    // // eslint-disable-next-line no-unused-vars
-    //   .catch((err) => {
-    //     console.log('could not fetch data');
-    //   });
+    fetch(url, { method })
+      .then((response) => response.json())
+      .then((response) => {
+        console.log(response);
+        this.setState({
+          portfolioList: response[0].data,
+        });
+      })
+    // eslint-disable-next-line no-unused-vars
+      .catch((err) => {
+        console.log('could not fetch data');
+      });
   }
 
   render() {
