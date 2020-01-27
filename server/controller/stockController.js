@@ -6,7 +6,6 @@ const db = require('../model/index.js');
 const models = require('../model/index');
 
 // Helper Functions
-
 const convertDateToSeconds = (inputString) => {
   const date = new Date(inputString);
   return date.getTime() / 1000;
@@ -20,34 +19,43 @@ const buildDateRange = (inputData, startDate, endDate) => {
   const startDateSeconds = convertDateToSeconds(startDate);
   const endDateSeconds = convertDateToSeconds(endDate);
 
-  const workingArray = [];
+  const workingObj = {};
+  const dates = [];
+  const open = [];
+  const high = [];
+  const low = [];
+  const close = [];
+  const volume = [];
 
-  for (let i = 0; i < data.length; i += 1) {
+  for (let i = data.length - 1; i >= 0; i -= 1) {
     const currentDate = convertDateToSeconds(data[i][0]);
 
-    if (currentDate < startDateSeconds) i = data.length - 1;
+    if (currentDate > endDateSeconds) i = 1;
 
     if (currentDate >= startDateSeconds && currentDate <= endDateSeconds) {
-      const buildObject = {};
-
-      buildObject.date = data[i][0];
-      buildObject.open = data[i][1]['1. open'];
-      buildObject.high = data[i][1]['2. high'];
-      buildObject.low = data[i][1]['3. low'];
-      buildObject.close = data[i][1]['4. close'];
-      buildObject.volume = data[i][1]['5. volume'];
-
-      workingArray.push(buildObject);
+      dates.push(data[i][0]);
+      open.push(data[i][1]['1. open']);
+      high.push(data[i][1]['2. high']);
+      low.push(data[i][1]['3. low']);
+      close.push(data[i][1]['4. close']);
+      volume.push(data[i][1]['5. volume']);
     }
   }
 
-  return workingArray;
+  workingObj.dates = dates;
+  workingObj.open = open;
+  workingObj.high = high;
+  workingObj.low = low;
+  workingObj.close = close;
+  workingObj.volume = volume;
+
+  return workingObj;
 };
 
 const stockController = {
 
   fetchStockData(req, res, next) {
-
+    console.log('request params', req.params);
     fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${req.body.stockName}&outputsize=full&apikey=Y6A15R1X3FBQ97V4`)
       .then((responseData) => responseData.json())
       .then((responseData) => {
