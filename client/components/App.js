@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+/* eslint-disable class-methods-use-this */
 /* eslint-disable react/jsx-filename-extension */
 import React, { Component } from 'react';
 import Login from './Login';
@@ -281,7 +283,7 @@ export default class App extends Component {
 
     console.log('ticker:', ticker);
 
-    const url = `route/?ticker=${ticker}&start=${start}&end=${end}`;
+    const url = `api/stock/getStocks/?ticker=${ticker}&start=${start}&end=${end}`;
     // console.log(url);
 
     // eslint-disable-next-line no-undef
@@ -291,16 +293,17 @@ export default class App extends Component {
         console.log(data);
         this.setState({
           data: {
-            lables: data.date,
+            labels: data[0].dates,
             datasets: [
               {
-                label: `${searchValue} Closing Price`,
-                data: data.close,
+                label: `${ticker} Closing Price`,
+                data: data[0].close,
               },
             ],
           },
         });
       })
+      // eslint-disable-next-line no-unused-vars
       .catch((err) => {
         console.log('could not fetch data');
       });
