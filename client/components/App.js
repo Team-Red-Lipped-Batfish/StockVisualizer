@@ -5,6 +5,7 @@ import Visualizer from './Visualizer';
 import LineGraph from './LineGraph';
 // eslint-disable-next-line no-unused-vars
 import styles from '../styles.css';
+import Portfolio from './Portfolio';
 
 export default class App extends Component {
   constructor(props) {
@@ -14,6 +15,8 @@ export default class App extends Component {
       searchValue: '',
       start: '',
       end: '',
+      portfolioList: ['MSFT', 'SPOT', 'AAPL'],
+      newStock: '',
       data: {
         labels: [],
         datasets: [],
@@ -22,6 +25,8 @@ export default class App extends Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.addStockToPortfolio = this.addStockToPortfolio.bind(this);
+    this.deleteStock = this.deleteStock.bind(this);
   }
 
   componentDidMount() {
@@ -271,9 +276,12 @@ export default class App extends Component {
     // console.log('hello');
     const { searchValue, start, end } = this.state;
     e.preventDefault();
+    let ticker = e.target.getAttribute('ticker');
+    if (!ticker) ticker = searchValue;
 
+    console.log('ticker:', ticker);
 
-    const url = `route/?ticker=${searchValue}&start=${start}&end=${end}`;
+    const url = `route/?ticker=${ticker}&start=${start}&end=${end}`;
     // console.log(url);
 
     // eslint-disable-next-line no-undef
@@ -298,11 +306,23 @@ export default class App extends Component {
       });
   }
 
+  addStockToPortfolio() {
+    const { newStock } = this.state;
+    console.log(newStock, 'Add new stock to portfolio');
+  }
+
+  deleteStock(e) {
+    const ticker = e.target.getAttribute('ticker');
+    console.log(ticker, 'To be deleted');
+  }
+
   render() {
     const {
-      isLoggedin, start, end, data, searchValue,
+      isLoggedin, start, end, data, searchValue, portfolioList, newStock,
     } = this.state;
-    const { handleChange, handleSubmit } = this;
+    const {
+      handleChange, handleSubmit, addStockToPortfolio, deleteStock,
+    } = this;
 
     // console.log(isLoggedin);
 
@@ -315,8 +335,9 @@ export default class App extends Component {
     }
     return (
       <div>
-        <Visualizer
-          app={
+        <div>
+          <Visualizer
+            app={
            {
              searchValue,
              start,
@@ -325,10 +346,21 @@ export default class App extends Component {
              handleSubmit,
            }
           }
+          />
+        </div>
+        <Portfolio
+          portfolioList={portfolioList}
+          handleSubmit={handleSubmit}
+          handleChange={handleChange}
+          newStock={newStock}
+          addStockToPortfolio={addStockToPortfolio}
+          deleteStock={deleteStock}
         />
-        <LineGraph
-          data={data}
-        />
+        <div className="stock-view">
+          <LineGraph
+            data={data}
+          />
+        </div>
       </div>
     );
   }

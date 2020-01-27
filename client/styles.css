@@ -17,6 +17,11 @@ body {
 .SearchBar {
   width: 30%;
 }
+.stock-view {
+  display: grid;
+  grid-template-columns: max-content max-content;
+  grid-gap: 10%;
+}
 
 input {
   background-color: rgb(33, 37, 43);
